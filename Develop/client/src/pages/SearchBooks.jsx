@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect  } from 'react';
+import { useMutation } from '@apollo/client';
 import {
   Container,
   Col,
@@ -11,18 +12,16 @@ import {
 import Auth from '../utils/auth';
 import { saveBook, searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
+import { useMatch } from 'react-router-dom';
+import { SAVE_BOOK } from '../utils/mutations';
+import { GET_ME } from '../utils/queries';
 
 const SearchBooks = () => {
-  // create state for holding returned google api data
   const [searchedBooks, setSearchedBooks] = useState([]);
-  // create state for holding our search field data
   const [searchInput, setSearchInput] = useState('');
-
-  // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
+  const [saveBook, { error , data }] = useMutation(SAVE_BOOK);
 
-  // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
-  // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
     return () => saveBookIds(savedBookIds);
   });
@@ -39,14 +38,14 @@ const SearchBooks = () => {
       const response = await searchGoogleBooks(searchInput);
 
       if (!response.ok) {
-        throw new Error('something went wrong!');
+        throw new Error('Oops! It looks like something went wrong!');
       }
 
       const { items } = await response.json();
 
       const bookData = items.map((book) => ({
         bookId: book.id,
-        authors: book.volumeInfo.authors || ['No author to display'],
+        authors: book.volumeInfo.authors || ['No author'],
         title: book.volumeInfo.title,
         description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || '',
@@ -60,10 +59,11 @@ const SearchBooks = () => {
   };
 
   // create function to handle saving a book to our database
-  const handleSaveBook = async (bookId) => {
+  const handleSaveBook = async ({authors,bookId,title,link,image,description}) => {
+    
     // find the book in `searchedBooks` state by the matching id
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
-
+    
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -72,13 +72,17 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await saveBook(bookToSave, token);
+      const {data} = await saveBook({
+        variables: {
+          authors,
+          bookId,
+          title,
+          link,
+          image,
+          description
+        }
+      })
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-
-      // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
       console.error(err);
@@ -99,12 +103,12 @@ const SearchBooks = () => {
                   onChange={(e) => setSearchInput(e.target.value)}
                   type='text'
                   size='lg'
-                  placeholder='Search for a book'
+                  placeholder='Book Name:'
                 />
               </Col>
               <Col xs={12} md={4}>
                 <Button type='submit' variant='success' size='lg'>
-                  Submit Search
+                  Search
                 </Button>
               </Col>
             </Row>
@@ -134,10 +138,10 @@ const SearchBooks = () => {
                       <Button
                         disabled={savedBookIds?.some((savedBookId) => savedBookId === book.bookId)}
                         className='btn-block btn-info'
-                        onClick={() => handleSaveBook(book.bookId)}>
+                        onClick={() => handleSaveBook(book)}>
                         {savedBookIds?.some((savedBookId) => savedBookId === book.bookId)
-                          ? 'This book has already been saved!'
-                          : 'Save this Book!'}
+                          ? 'This book is already saved to your list'
+                          : 'Book saved'}
                       </Button>
                     )}
                   </Card.Body>
