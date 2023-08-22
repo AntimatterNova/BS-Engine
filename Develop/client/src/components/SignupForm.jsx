@@ -44,9 +44,9 @@ const SignUpForm = () => {
   return (
     <main className="flex-row justify-center mb-4">
       <div className="col-12 col-lg-10">
-        <div className="card">
+        <div className="card border border-3 border-success">
           <h4 className="card-header bg-dark text-light p-2">Sign Up</h4>
-          <div className="card-body">
+          <div className="card-body bg-dark">
             {data ? (
               <p>
                 Success! You may now head{' '}
@@ -55,31 +55,31 @@ const SignUpForm = () => {
             ) : (
               <form onSubmit={handleFormSubmit}>
                 <input
-                  className="form-input"
-                  placeholder="Your username"
+                  className="form-input m-2"
+                  placeholder="Username:"
                   name="username"
                   type="text"
                   value={userFormData.name}
                   onChange={handleInputChange}
                 />
                 <input
-                  className="form-input"
-                  placeholder="Your email"
+                  className="form-input m-2"
+                  placeholder="Email:"
                   name="email"
                   type="email"
                   value={userFormData.email}
                   onChange={handleInputChange}
                 />
                 <input
-                  className="form-input"
-                  placeholder="********"
+                  className="form-input m-2"
+                  placeholder="Password:"
                   name="password"
                   type="password"
                   value={userFormData.password}
                   onChange={handleInputChange}
                 />
                 <button
-                  className="btn btn-block btn-primary"
+                  className="btn btn-block btn-success m-2"
                   style={{ cursor: 'pointer' }}
                   type="submit"
                 >

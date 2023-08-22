@@ -91,7 +91,7 @@ const SearchBooks = () => {
 
   return (
     <>
-      <div className="text-light bg-dark rounded-bottom-5 p-5">
+      <div className="border border-3 border-top-0 border-success text-light bg-dark rounded-bottom-5 p-5">
         <Container>
           <h1>Search for Books!</h1>
           <Form onSubmit={handleFormSubmit}>
@@ -126,14 +126,16 @@ const SearchBooks = () => {
           {searchedBooks.map((book) => {
             return (
               <Col md="4" key={book.bookId}>
-                <Card className="mb-3 bg-dark bg-gradient text-light" border='dark'>
+                <Card className="border-3 border-success mb-3 bg-dark bg-gradient text-light">
                   {book.image ? (
-                    <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' />
+                    <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' style={{ width: '100%', height: '600px' }}/>
                   ) : null}
                   <Card.Body>
                     <Card.Title>{book.title}</Card.Title>
                     <p className='small'>Authors: {book.authors}</p>
-                    <Card.Text>{book.description}</Card.Text>
+                    <Card.Text className="description">
+                      {book.description}
+                    </Card.Text>
                     {Auth.loggedIn() && (
                       <Button
                         disabled={savedBookIds?.some((savedBookId) => savedBookId === book.bookId)}

@@ -12,8 +12,8 @@ const AppNavbar = () => {
 
   return (
     <>
-      <Navbar bg='dark' variant='dark' expand='lg'>
-        <Container className="rounded" fluid>
+      <Navbar className="border border-3 border-top-0 border-start-0 border-end-0 border-success" bg='dark' variant='dark' expand='lg'>
+        <Container fluid>
           <Navbar.Brand as={Link} to='/'>
             Google Books Search
           </Navbar.Brand>
@@ -32,7 +32,7 @@ const AppNavbar = () => {
                   <Nav.Link onClick={Auth.logout}>Logout</Nav.Link>
                 </>
               ) : (
-                <Nav.Link onClick={() => setShowModal(true)}>Login/Sign Up</Nav.Link>
+                <Nav.Link className="text-success" onClick={() => setShowModal(true)}>Login/Sign Up</Nav.Link>
               )}
             </Nav>
           </Navbar.Collapse>
@@ -46,8 +46,8 @@ const AppNavbar = () => {
         aria-labelledby='signup-modal'>
         {/* tab container to do either signup or login component */}
         <Tab.Container defaultActiveKey='login'>
-          <Modal.Header closeButton>
-            <Modal.Title id='signup-modal'>
+          <Modal.Header className="text-light bg-dark border border-3 border-top-0 border-start-0 border-end-0 border-success" closeButton>
+            <Modal.Title className="rounded" id='signup-modal'>
               <Nav variant='pills'>
                 <Nav.Item>
                   <Nav.Link eventKey='login'>Login</Nav.Link>
@@ -58,7 +58,7 @@ const AppNavbar = () => {
               </Nav>
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body className="bg-dark rounded-bottom">
             <Tab.Content>
               <Tab.Pane eventKey='login'>
                 <LoginForm handleModalClose={() => setShowModal(false)} />
