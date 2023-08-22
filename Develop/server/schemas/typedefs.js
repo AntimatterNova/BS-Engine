@@ -33,4 +33,4 @@ const typeDefs = `
     }
 `;
 
-module.exports = typedefs;
+module.exports = typeDefs;

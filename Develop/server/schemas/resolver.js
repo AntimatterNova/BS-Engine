@@ -1,48 +1,48 @@
 const { User } = require('../models');
-const Book = require('../models/Book');
+// const Book = require('../models/Book');
 const { signToken, AuthError } = require('../utils/auth');
 
-const resolvers = {
+const resolver = {
   Query: {
     users: async () => {
       return User.find();
     },
-    user: async (parent, {userId}) => {
+    user: async (_, {userId}) => {
         console.log(`Requested User ID => `+userId)
       return User.findOne({ _id: userId })
       .select('-__v')
       .populate('savedBooks');
     },
-    me: async (parent, args, context) => {
+    me: async (_, args, context) => {
         if (context.user) {
           return User.findOne({ _id: context.user._id }).populate('savedBooks');
         }
-        throw AuthError;
+        throw new AuthError;
       },
   },
 
   Mutation: {
-    addUser: async (parent, { username, email, password }) => {
+    addUser: async (_, { username, email, password }) => {
       const user = await User.create({ username, email, password });
       const token = signToken(user);
       return { token, user };
     },
-    login: async (parent, { email, password }) => {
+    login: async (_, { email, password }) => {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw AuthError;
+        throw new AuthError('User account was not found');
       }
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw AuthError;
+        throw AuthError('One of your credentials incorrect. Please reinter and try again');
       }
       const token = signToken(user);
 
       return { token, user };
     },
-    saveBook: async (parent, {authors,bookId,title,link,image,description}, context) => {
+    saveBook: async (_, {authors,bookId,title,link,image,description}, context) => {
         if (bookId) {
        return User.findOneAndUpdate(
           { _id: context.user._id },
@@ -52,10 +52,9 @@ const resolvers = {
           {new: true}
         ); 
       }
-      throw AuthError;
-      ("You aren't logged in!");
+      throw new AuthError("You aren't logged in!");
     },
-    removeBook: async (parent, { bookId }, context) => {
+    removeBook: async (_, { bookId }, context) => {
         if (bookId) {
         return User.findOneAndUpdate(
           { _id: context.user._id },
@@ -67,9 +66,9 @@ const resolvers = {
             {new: true}
         );
       }
-      throw AuthError;
+      throw new AuthError("You aren't logged in");
     },
   },
 };
 
-module.exports = resolvers;
+module.exports = resolver;
