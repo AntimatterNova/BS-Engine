@@ -13,13 +13,17 @@
 ## Product Description
 Welcome to BS-Engine, your one-stop destination for managing your reading journey. BS-Engine is a user-friendly website designed for book enthusiasts who want to explore, discover, and keep track of their favorite books. Whether you're an avid reader, a casual browser, or just getting started on your reading journey, BS-Engine has something special for you.
 
+![Homepage](./Assets/Site1.png)
+![Login](./Assets/Site2.png)
+![Sign Up](./Assets/Site3.png)
+
 <a name='usage'></a>
 ## Usage
-N/A
+Us ```npm run dev```
 
 <a name='installation'></a>
 ## Installation
-N/A
+Us ```npm i``` to download all required dependencies. Make sure you're in the 'Develop' folder when running the command.
 
 <a name='contributing'></a>
 ## Contributing
