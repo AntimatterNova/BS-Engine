@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Navbar, Nav, Container, Modal, Tab } from 'react-bootstrap';
 import SignUpForm from './SignupForm';
 import LoginForm from './LoginForm';
+import logo from '../assets/Logo.png';
 
 import Auth from '../utils/auth';
 
@@ -15,7 +16,8 @@ const AppNavbar = () => {
       <Navbar className="border border-3 border-top-0 border-start-0 border-end-0 border-success" bg='dark' variant='dark' expand='lg'>
         <Container fluid>
           <Navbar.Brand as={Link} to='/'>
-            Google Books Search
+          <img className="me-3" src={logo} alt="Logo" width="40" height="34" class="d-inline-block align-text-top"/>
+            BS-Engine
           </Navbar.Brand>
           <Navbar.Toggle aria-controls='navbar' />
           <Navbar.Collapse id='navbar' className='d-flex flex-row-reverse'>
